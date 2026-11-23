@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulados — Estatística Aplicada</title>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="simulados">
+<div id="site-header"></div>
+<main class="wrap">
+  <div class="page-title">
+    <h1 id="sim-title">Simulados</h1>
+    <p class="calc-note" id="sim-sub"></p>
+  </div>
+  <nav class="pager" id="pager-top" aria-label="Paginação dos simulados"></nav>
+  <div class="sim-layout">
+    <aside class="toc"><h4>Questões</h4><nav id="toc"></nav></aside>
+    <section id="content" aria-live="polite"></section>
+  </div>
+  <nav class="pager" id="pager-bottom" aria-label="Paginação dos simulados"></nav>
+</main>
+<div id="site-footer"></div>
+<script src="vendor/katex/katex.min.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/sim1.js"></script>
+<script src="js/sim2.js"></script>
+<script>
+(function () {
+  var total = 2;
+  function pagerHtml(cur) {
+    var h = '<span class="lab">Simulado</span>';
+    h += cur > 1 ? '<a href="#' + (cur - 1) + '" aria-label="Simulado anterior">‹</a>' : '<a class="dis" aria-disabled="true">‹</a>';
+    for (var i = 1; i <= total; i++) h += i === cur ? '<span class="cur" aria-current="page">' + i + '</span>' : '<a href="#' + i + '">' + i + '</a>';
+    h += cur < total ? '<a href="#' + (cur + 1) + '" aria-label="Próximo simulado">›</a>' : '<a class="dis" aria-disabled="true">›</a>';
+    return h;
+  }
+  function show() {
+    var n = parseInt((location.hash || '#1').slice(1), 10);
+    if (!(n >= 1 && n <= total)) n = 1;
+    var s = EAP.sims[n];
+    document.title = s.title + ' — Estatística Aplicada';
+    document.getElementById('sim-title').textContent = s.title;
+    document.getElementById('sim-sub').textContent = 'Aplicado em ' + s.date + ' · resolvido no formato do professor, com tabelas, fórmulas e gráficos. O selo verde compara cada resposta com o gabarito.';
+    document.getElementById('pager-top').innerHTML = pagerHtml(n);
+    document.getElementById('pager-bottom').innerHTML = pagerHtml(n);
+    document.getElementById('toc').innerHTML = s.toc.map(function (q) { return '<a href="#q' + q[0] + '" data-q="1"><b>' + q[0] + '</b><span>' + q[1] + '</span></a>'; }).join('');
+    document.getElementById('content').innerHTML = s.render();
+    window.scrollTo(0, 0);
+  }
+  // links internos das questões (#q3) não devem trocar de simulado
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-q]');
+    if (a) { e.preventDefault(); var el = document.getElementById(a.getAttribute('href').slice(1)); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+  });
+  window.addEventListener('hashchange', show);
+  show();
+})();
+</script>
+<script src="js/print.js"></script>
+</body>
+</html>

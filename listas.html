@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Listas — Estatística Aplicada</title>
+<link rel="stylesheet" href="vendor/katex/katex.min.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="listas">
+<div id="site-header"></div>
+<main class="wrap">
+  <div class="page-title">
+    <h1 id="t">Listas de exercícios</h1>
+    <p class="calc-note" id="sub"></p>
+  </div>
+  <nav class="pager" id="pager-top" aria-label="Paginação das listas"></nav>
+  <div class="sim-layout">
+    <aside class="toc"><h4>Questões</h4><nav id="toc"></nav></aside>
+    <section id="content"></section>
+  </div>
+  <nav class="pager" id="pager-bottom" aria-label="Paginação das listas"></nav>
+</main>
+<div id="site-footer"></div>
+<script src="vendor/katex/katex.min.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/stats.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/listas-common.js"></script>
+<script src="js/listas-01-02.js"></script>
+<script src="js/listas-03-04.js"></script>
+<script src="js/listas-05-06.js"></script>
+<script src="js/listas-07-10.js"></script>
+<script src="js/listas-11-13.js"></script>
+<script src="js/listas-14-16.js"></script>
+<script>
+(function () {
+  var NOMES = ['Variáveis', 'Distribuição de frequência', 'Representação gráfica', 'Média', 'Mediana', 'Moda', 'Dispersão (desvio padrão e CV)', 'Boxplot',
+    'Distribuição normal', 'Amostra para estimar a média', 'Amostra para estimar a proporção', 'IC da média', 'IC da proporção', 'Correlação', 'Regressão', 'Teste do qui-quadrado'];
+  var total = 16;
+  function pager(cur) {
+    var h = '<span class="lab">Lista</span>' + (cur > 1 ? '<a href="#' + (cur - 1) + '">‹</a>' : '<a class="dis">‹</a>');
+    for (var i = 1; i <= total; i++) {
+      var ok = !!EAP.listas[i];
+      h += i === cur ? '<span class="cur">' + i + '</span>' : '<a href="#' + i + '"' + (ok ? '' : ' style="opacity:.45"') + '>' + i + '</a>';
+    }
+    return h + (cur < total ? '<a href="#' + (cur + 1) + '">›</a>' : '<a class="dis">›</a>');
+  }
+  function show() {
+    var n = parseInt((location.hash || '#1').slice(1), 10); if (!(n >= 1 && n <= total)) n = 1;
+    var L = EAP.listas[n];
+    document.getElementById('pager-top').innerHTML = document.getElementById('pager-bottom').innerHTML = pager(n);
+    if (L) {
+      document.title = L.title + ' — Estatística Aplicada';
+      document.getElementById('t').textContent = L.title;
+      document.getElementById('sub').textContent = L.sub + ' · o selo compara a resposta com o resultado esperado da lista.';
+      document.getElementById('toc').innerHTML = L.toc.map(function (q) { return '<a href="#q' + q[0] + '" data-q="1"><b>' + q[0] + '</b><span>' + q[1] + '</span></a>'; }).join('');
+      document.getElementById('content').innerHTML = L.render();
+    } else {
+      document.getElementById('t').textContent = 'Lista ' + n + ' — ' + NOMES[n - 1];
+      document.getElementById('sub').textContent = '';
+      document.getElementById('toc').innerHTML = '';
+      document.getElementById('content').innerHTML = '<div class="q"><div class="body"><p class="calc-note" style="margin-top:20px">Esta lista ainda está em preparação.</p></div></div>';
+    }
+    window.scrollTo(0, 0);
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('a[data-q]');
+    if (a) { e.preventDefault(); var el = document.getElementById(a.getAttribute('href').slice(1)); if (el) el.scrollIntoView({ behavior: 'smooth' }); }
+  });
+  window.addEventListener('hashchange', show);
+  show();
+})();
+</script>
+<script src="js/print.js"></script>
+</body>
+</html>
