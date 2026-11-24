@@ -45,6 +45,12 @@
   function question(n, stmt, body) {
     return '<article class="q" id="q' + n + '"><header><div class="n">' + n + '</div><div class="stmt">' + stmt + '</div></header><div class="body">' + body + '</div></article>';
   }
+  // “de onde vem o μ”: a média é calculada antes da coluna F·(x−μ)²
+  function passoMedia(sxf, n, mu) {
+    return '<p class="calc-note"><b>Passo 1 — a média μ.</b> Ela sai das colunas <b>X·F</b> e <b>F</b> (some cada coluna e divida): é o valor usado em “x − μ” na última coluna.</p>' +
+      formula('\\mu = \\dfrac{\\sum X\\cdot F}{\\sum F} = \\dfrac{' + S.tex(sxf, 2).replace(/\{,\}00$/, '') + '}{' + S.tex(n, 0) + '} = ' + S.tex(mu, 2)) +
+      '<p class="calc-note"><b>Passo 2 — a coluna F·(x−μ)²:</b> para cada linha, (x − μ)² multiplicado por F.</p>';
+  }
   // tabela de "X | F | X·F | F(x−μ)²" para valores distintos (jeito do slide 36)
   function dispTable(values, caption, unit) {
     var m = S.mean(values), freq = S.freqDiscrete(values), s = 0, sq = 0;
@@ -53,11 +59,11 @@
       return [S.fmt(f.x, Number.isInteger(f.x) ? 0 : 1), f.F, S.fmt(xf, Number.isInteger(xf) ? 0 : 1), S.fmt(d, 2)];
     });
     return {
-      html: table({ caption: caption, head: ['X' + (unit ? ' (' + unit + ')' : ''), 'F', 'X·F', 'F·(x−μ)²'], rows: rows, foot: ['Σ', values.length, S.fmt(s, 0), S.fmt(sq, 2)] }),
+      html: passoMedia(s, values.length, m) + table({ caption: caption, head: ['X' + (unit ? ' (' + unit + ')' : ''), 'F', 'X·F', 'F·(x−μ)²'], rows: rows, foot: ['Σ', values.length, S.fmt(s, 0), S.fmt(sq, 2)] }),
       n: values.length, sxf: s, mu: m, sq: sq
     };
   }
 
-  global.EAP.U = { ask: U_ask, tx: tx, formula: formula, table: table, answer: answer, gab: gab, note: note, sub: sub, calc: calc, part: part, dataBox: dataBox, cols: cols, question: question, dispTable: dispTable };
+  global.EAP.U = { passoMedia: passoMedia, ask: U_ask, tx: tx, formula: formula, table: table, answer: answer, gab: gab, note: note, sub: sub, calc: calc, part: part, dataBox: dataBox, cols: cols, question: question, dispTable: dispTable };
   global.EAP.sims = global.EAP.sims || {};
 })(window);

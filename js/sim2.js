@@ -155,7 +155,7 @@
       '<p>a) Qual a mediana do tempo de resposta? &nbsp; e) Qual o coeficiente de variação do tempo de resposta?</p>';
     let body = '';
     body += U.part('', 'Tabela de frequência obtida do histograma',
-      U.table({ caption: 'Tempo de resposta', head: ['Tempo (ms)', 'F', 'FAC', 'Pm (X)', 'X·F', 'F·(x−μ)²'], left: [0], rows: rows.map(r => [S.classLabel(r), r.F, r.FAC, f(r.pm, 1), f(r.pm * r.F, 1), f(r.F * Math.pow(r.pm - gs.mu, 2), 1)]), foot: ['Σ', n, '', '', f(gs.sxf, 1), f(gs.sq, 1)], hl: [gm.cls] }) +
+      U.passoMedia(gs.sxf, n, gs.mu) + U.table({ caption: 'Tempo de resposta', head: ['Tempo (ms)', 'F', 'FAC', 'Pm (X)', 'X·F', 'F·(x−μ)²'], left: [0], rows: rows.map(r => [S.classLabel(r), r.F, r.FAC, f(r.pm, 1), f(r.pm * r.F, 1), f(r.F * Math.pow(r.pm - gs.mu, 2), 1)]), foot: ['Σ', n, '', '', f(gs.sxf, 1), f(gs.sq, 1)], hl: [gm.cls] }) +
       U.calc('Classe mediana (destacada): primeira classe cuja FAC alcança ΣF/2 = ' + gm.half + '.'));
     body += U.part('a', 'Mediana do tempo de resposta',
       U.formula([`\\dfrac{\\sum F}{2} = \\dfrac{${n}}{2} = ${gm.half}\\ \\Rightarrow\\ \\text{classe mediana: } ${edges[gm.cls]}\\,|\\!-\\!-\\,${edges[gm.cls + 1]}`,

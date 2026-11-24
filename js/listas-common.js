@@ -75,7 +75,7 @@
   L.tabAgrup = function (cl, caption, unit, dec) {
     const g = S.groupedStats(cl.rows);
     return {
-      g, html: U.table({ caption, head: [unit, 'F', 'Pm (X)', 'X·F', 'F·(x−μ)²'], left: [0], rows: cl.rows.map(r => [S.classLabel(r, dec || 0), r.F, f(r.pm, 1), f(r.pm * r.F, 1), f(r.F * Math.pow(r.pm - g.mu, 2), 2)]), foot: ['Σ', g.n, '', f(g.sxf, 1), f(g.sq, 2)] })
+      g, html: U.passoMedia(g.sxf, g.n, g.mu) + U.table({ caption, head: [unit, 'F', 'Pm (X)', 'X·F', 'F·(x−μ)²'], left: [0], rows: cl.rows.map(r => [S.classLabel(r, dec || 0), r.F, f(r.pm, 1), f(r.pm * r.F, 1), f(r.F * Math.pow(r.pm - g.mu, 2), 2)]), foot: ['Σ', g.n, '', f(g.sxf, 1), f(g.sq, 2)] })
     };
   };
   L.boxTable = function (b, cap, d) {
